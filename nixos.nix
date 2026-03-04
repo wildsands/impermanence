@@ -496,6 +496,13 @@ in
                 (mkAfter (concatMapStrings mkBindMount neededForBootDirs));
           }
 
+          # Ensure tmpfiles rules are applied whenever Impermanence's bind
+          # mounts change
+          {
+            systemd.services."systemd-tmpfiles-resetup".restartTriggers =
+              map (d: "${d.persistentStoragePath}:${d.dirPath}") directories;
+          }
+
           # Work around an issue with persisting /etc/machine-id where the
           # systemd-machine-id-commit.service unit fails if the final
           # /etc/machine-id is bind mounted from persistent storage. For
