@@ -291,7 +291,7 @@ in
               let
                 mkBindMount = { dirPath, persistentStoragePath, hideMount, allowTrash, ... }: {
                   wantedBy = [ "local-fs.target" ];
-                  before = [ "local-fs.target" ];
+                  before = [ "local-fs.target" "systemd-tmpfiles-resetup.service" ];
                   where = concatPaths [ "/" dirPath ];
                   what = concatPaths [ persistentStoragePath dirPath ];
                   unitConfig.DefaultDependencies = false;
